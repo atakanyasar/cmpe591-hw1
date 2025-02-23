@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 OBSERVATION_IMAGES_FILE = "data/imgs_observation_0.pt"
 RESULT_IMAGES_FILE = "data/imgs_result_0.pt"
 ACTIONS_FILE = "data/actions_0.pt"
+MODEL_NAME = "hw1_3.pt"
 BATCH_SIZE = 32
 MAX_EPOCHS = 200
 PATIENCE = 10
@@ -139,7 +140,7 @@ def train_model(train_loader, test_loader):
             print("Early stopping!")
             break
 
-    torch.save(best_model_state, "vae_model.pth")
+    torch.save(best_model_state, MODEL_NAME)
     return model, train_losses, test_losses
 
 # Compare function for generated images
@@ -201,7 +202,7 @@ def test():
     test_loader = DataLoader(test_dataset, batch_size=1, shuffle=True)
 
     model = VAE().to(DEVICE)
-    model.load_state_dict(torch.load("vae_model.pth"))
+    model.load_state_dict(torch.load(MODEL_NAME))
 
     compare_images(model, test_loader, num_samples=5)
 
