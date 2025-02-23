@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 # Configuration (Constants)
 POSITIONS_FILE = "data/positions_0.pt"
 ACTIONS_FILE = "data/actions_0.pt"
-IMAGES_FILE = "data/imgs_0.pt"
+IMAGES_FILE = "data/imgs_observation_0.pt"
 INPUT_SIZE = 4 + 3 * 128 * 128
 BATCH_SIZE = 32
 MAX_EPOCHS = 200
@@ -174,7 +174,7 @@ def train_model():
             "best_model_key": best_model_key,
             "results": results,
         },
-        "complete_model.pth",
+        "complete_model_mlp.pth",
     )
 
     best_model = MLP(INPUT_SIZE).to(DEVICE)
@@ -183,7 +183,7 @@ def train_model():
 
 # Prediction Function
 def load_and_predict(input_data):
-    checkpoint = torch.load("complete_model.pth")
+    checkpoint = torch.load("complete_model_mlp.pth")
     model_key = checkpoint["best_model_key"]
     model = MLP(checkpoint["input_size"]).to(DEVICE)
     model.load_state_dict(checkpoint["model_state_dict"])
@@ -198,7 +198,7 @@ def load_and_predict(input_data):
 # Plotting Function
 def plot_training_history(results):  
     """Plots training and validation loss for the best model."""
-    checkpoint = torch.load("complete_model.pth")
+    checkpoint = torch.load("complete_model_mlp.pth")
     best_model_key = checkpoint["best_model_key"]
 
     n_folds = len(results[best_model_key]["train_losses"])

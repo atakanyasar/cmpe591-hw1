@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 # Configuration (Constants)
 POSITIONS_FILE = "data/positions_0.pt"
 ACTIONS_FILE = "data/actions_0.pt"
-IMAGES_FILE = "data/imgs_0.pt"
+IMAGES_FILE = "data/imgs_observation_0.pt"
 INPUT_SIZE = 4 + 3 * 128 * 128
 BATCH_SIZE = 32
 MAX_EPOCHS = 200
@@ -139,8 +139,6 @@ def train_model():
     kfold = KFold(n_splits=5, shuffle=True)
 
     results = {  # Store results for all model/optimizer combinations
-        "mlp_adam": {"fold_results": [], "train_losses": [], "val_losses": [], "best_model_state": None, "best_val_loss": float("inf")},
-        "mlp_sgd": {"fold_results": [], "train_losses": [], "val_losses": [], "best_model_state": None, "best_val_loss": float("inf")},
         "cnn_adam": {"fold_results": [], "train_losses": [], "val_losses": [], "best_model_state": None, "best_val_loss": float("inf")},
         "cnn_sgd": {"fold_results": [], "train_losses": [], "val_losses": [], "best_model_state": None, "best_val_loss": float("inf")},
     }
@@ -204,7 +202,7 @@ def train_model():
             "best_model_key": best_model_key,
             "results": results,
         },
-        "complete_model.pth",
+        "complete_model_cnn.pth",
     )
 
     best_model = MLP(INPUT_SIZE).to(DEVICE) if best_model_key.startswith("mlp") else CNN().to(DEVICE)
@@ -213,7 +211,7 @@ def train_model():
 
 # Prediction Function
 def load_and_predict(input_data):
-    checkpoint = torch.load("complete_model.pth")
+    checkpoint = torch.load("complete_model_cnn.pth")
     model_key = checkpoint["best_model_key"]
     model = MLP(checkpoint["input_size"]).to(DEVICE) if model_key.startswith("mlp") else CNN().to(DEVICE)
     model.load_state_dict(checkpoint["model_state_dict"])
@@ -228,7 +226,7 @@ def load_and_predict(input_data):
 # Plotting Function
 def plot_training_history(results):  
     """Plots training and validation loss for the best model."""
-    checkpoint = torch.load("complete_model.pth")
+    checkpoint = torch.load("complete_model_cnn.pth")
     best_model_key = checkpoint["best_model_key"]
 
     n_folds = len(results[best_model_key]["train_losses"])
