@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 POSITIONS_FILE = "data/positions_0.pt"
 ACTIONS_FILE = "data/actions_0.pt"
 IMAGES_FILE = "data/imgs_observation_0.pt"
-MODEL_NAME = "hw1_1.pt"
+MODEL_NAME = "hw1_2.pt"
 INPUT_SIZE = 4 + 3 * 128 * 128
 BATCH_SIZE = 32
 MAX_EPOCHS = 200
